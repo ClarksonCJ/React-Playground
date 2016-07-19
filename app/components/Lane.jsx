@@ -1,4 +1,7 @@
 import React from 'react';
+import {compose} from 'redux';
+import {DropTarget} from 'react-dnd';
+import ItemTypes from '../constants/itemTypes';
 import connect from '../libs/connect';
 import LaneActions from '../actions/LaneActions';
 import NoteActions from '../actions/NoteActions';
@@ -6,7 +9,7 @@ import Notes from './Notes';
 import LaneHeader from './LaneHeader';
 
 const Lane = ({
-    lane, notes, LaneActions, NoteActions, ...props
+    connectDropTarget, lane, notes, LaneActions, NoteActions, ...props
 }) => {
     const editNote = (id, task) => {
         NoteActions.update({id, task, editing: false});
@@ -22,15 +25,20 @@ const Lane = ({
     const activateNoteEdit = id => {
         NoteActions.update({id, editing: true});
     };
+    const voteForNote = (id, e) => {
+        e.stopPropagation();
+        NoteActions.vote(id);        
+    }; 
 
-    return(
+    return connectDropTarget(
         <div {...props}>
             <LaneHeader lane={lane} />
             <Notes
                 notes={selectNotesByIds(notes, lane.notes)}
                 onNoteClick={activateNoteEdit}
                 onEdit={editNote}
-                onDelete={deleteNote} />
+                onDelete={deleteNote}
+                onVote={voteForNote} />
         </div>
     );
 };
@@ -41,11 +49,28 @@ function selectNotesByIds(allNotes, noteIds = []){
     ), []);
 }
 
-export default connect(
-    ({notes}) => ({
+const noteTarget = {
+    hover(targetProps, monitor){
+        const sourceProps = monitor.getItem();
+        const sourceId = sourceProps.id;
+
+        if(!targetProps.lane.notes.length){
+            LaneActions.attachToLane({
+                laneId: targetProps.lane.id,
+                noteId: sourceId
+            });
+        }
+    }
+};
+
+export default compose(
+    DropTarget(ItemTypes.NOTE, noteTarget, connect => ({
+        connectDropTarget: connect.dropTarget()
+    })),
+    connect(({notes}) =>({
         notes
     }), {
         NoteActions,
         LaneActions
-    }
+    })
 )(Lane)

@@ -10,7 +10,8 @@ body {
   background-color: #efefef;
   border: 1px solid #ccc;
   border-radius: 0.5em;
-  min-width: 10em;
+  min-width: 12em;
+  min-height:100px;
   vertical-align: top;
 }
 
@@ -62,17 +63,30 @@ body {
   margin: 0.5em;
   padding-left: 0;
 
-  max-width: 10em;
+  width: 15em;
   list-style: none;
+}
+
+.note-and-vote{
+  float:left;
+  width:100%;
 }
 
 .note{
   overflow: auto;
   margin-bottom: 0.5em;
-  padding: 0.5em;
+  margin-right:0;
+  padding: 0.25em;
   background-color: #fdfdfd;
   box-shadow: 0 0 0.3em .03em rgba(0,0,0,.3);
 }
+
+.note .vote-output{
+  float:left;
+  border: none;
+  cursor: pointer;
+}
+
 .note:hover{
   box-shadow: 0 0 0 0.3em .03em rgba(0,0,0,.7);
   transition: .6s;
@@ -86,10 +100,27 @@ body {
   float: left;
 }
 
+.note .vote{
+  float: right;  
+  background-color: #fdfdfd;
+  margin-left:0.5em;
+  border: none;
+  cursor: pointer;
+}
+
+.note:hover .vote{
+  float: right;  
+  background-color: lightyellow;
+  margin-left:0.5em;
+  border: none;
+  cursor: pointer;
+}
+
 .note .delete{
   float: right;
   padding: 0;
   background-color: #fdfdfd;
+  margin-left:0.5em;
   border: none;
   cursor: pointer;
   visibility: hidden;

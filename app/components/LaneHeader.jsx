@@ -16,7 +16,8 @@ export default connect(() => ({}), {
 
         NoteActions.create({
             id: noteId,
-            task: 'New Task'
+            task: 'New Task',
+            votes: 0
         });
         LaneActions.attachToLane({
             laneId: lane.id,

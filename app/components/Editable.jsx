@@ -22,6 +22,7 @@ class Edit extends React.Component{
 
         return <input
                 type="text"
+                lines="3"
                 className={classnames('edit', className)}
                 autoFocus={true}
                 defaultValue={value}
